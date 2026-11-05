@@ -1,0 +1,14 @@
+configfile: "wrappers/jwst/test/config.yaml"
+
+
+rule test_jwst_detector1:
+    input:
+        "wrappers/jwst/test/input_uncal.fits",
+    output:
+        "wrappers/jwst/test/output_rate.fits",
+    log:
+        "wrappers/jwst/test/test_jwst_detector1.log",
+    params:
+        stage_name="detector1",
+    wrapper:
+        "file:wrappers/jwst"

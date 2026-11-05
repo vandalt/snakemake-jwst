@@ -1,0 +1,18 @@
+name: jwst
+description: Run a selected JWST calibration pipeline stage.
+url: https://jwst-pipeline.readthedocs.io/
+authors:
+  - Thomas Vandal
+input:
+  - A single JWST input file or association file.
+output:
+  - >
+    One or more products created by the selected JWST pipeline stage. The
+    first output path determines the pipeline output directory.
+params:
+  stage_name: >
+    Required JWST stage name: ``detector1``, ``image2``, ``image3``, or
+    ``kpi3``.
+notes: >
+  Pipeline options are read from ``config["jwst"][params.stage_name]``. Add a
+  ``log:`` directive to capture Python stdout and stderr.

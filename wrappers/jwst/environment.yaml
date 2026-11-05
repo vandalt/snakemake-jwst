@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - pip=25.3
+  - python=3.14
+  - pip:
+      - jwst==3.0.0
+      - jwst-kpi @ git+https://github.com/kammerje/jwst-kpi@2dc282fbcfe81db0b06b97c70c354023c2bc446b
