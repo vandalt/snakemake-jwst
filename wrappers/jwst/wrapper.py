@@ -34,12 +34,11 @@ def pipeline_options(stage_name):
             f"Unsupported JWST stage {stage_name!r}. Expected one of: {supported_stages}."
         )
 
-    try:
-        options = snakemake.config["jwst"][stage_name]
-    except KeyError as error:
-        raise ValueError(
-            f"Missing configuration for JWST stage {stage_name!r} at jwst.{stage_name}."
-        ) from error
+    jwst_config = snakemake.config.get("jwst", {})
+    if not isinstance(jwst_config, Mapping):
+        raise TypeError("JWST configuration jwst must be a mapping.")
+
+    options = jwst_config.get(stage_name, {})
 
     if not isinstance(options, Mapping):
         raise TypeError(

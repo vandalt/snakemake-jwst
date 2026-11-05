@@ -31,21 +31,20 @@ environment is created automatically when executing with `--use-conda`.
 
 ## Configuration
 
-Pipeline options are configured globally under the selected stage:
+Pipeline options are optional and can be configured globally under the
+selected stage:
 
 ```yaml
 jwst:
   detector1:
-    save_results: true
-  image2: {}
-  image3: {}
-  kpi3: {}
+    save_calibrated_ramp: True
 ```
 
 The wrapper passes `config["jwst"][params.stage_name]` to the corresponding
-pipeline class. It defaults `save_results` to `true` when omitted. Declare
-the expected output products in each consumer rule; the parent directory of
-the first output is supplied to the pipeline as its output directory.
+pipeline class when present; omit `jwst` or a stage entry to use the pipeline
+defaults. It defaults `save_results` to `true` when omitted. Declare the
+expected output products in each consumer rule; the parent directory of the
+first output is supplied to the pipeline as its output directory.
 
 When network access is unavailable, the wrapper configures CRDS to use the
 serverless endpoint.

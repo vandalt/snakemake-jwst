@@ -53,7 +53,7 @@ def test_wrapper_does_not_mutate_shared_stage_options(
         def call(input_file: str, output_dir: str, **options: object) -> None:
             calls.append((input_file, output_dir, options))
 
-    options = {}
+    options = {"save_calibrated_ramp": True}
     snakemake = SimpleNamespace(
         params={"stage_name": "detector1"},
         input=["input.fits"],
@@ -74,5 +74,40 @@ def test_wrapper_does_not_mutate_shared_stage_options(
 
     runpy.run_path(str(WRAPPER), init_globals={"snakemake": snakemake})
 
-    assert options == {}
+    assert options == {"save_calibrated_ramp": True}
+    assert calls == [
+        (
+            "input.fits",
+            "results",
+            {"save_calibrated_ramp": True, "save_results": True},
+        )
+    ]
+
+
+def test_wrapper_uses_pipeline_defaults_without_configuration(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = []
+
+    class FakePipeline:
+        @staticmethod
+        def call(input_file: str, output_dir: str, **options: object) -> None:
+            calls.append((input_file, output_dir, options))
+
+    snakemake = SimpleNamespace(
+        params={"stage_name": "image2"},
+        input=["input.fits"],
+        output=["results/output.fits"],
+        config={},
+        log=[],
+    )
+
+    monkeypatch.setattr(
+        importlib,
+        "import_module",
+        lambda module_name: SimpleNamespace(Image2Pipeline=FakePipeline),
+    )
+
+    runpy.run_path(str(WRAPPER), init_globals={"snakemake": snakemake})
+
     assert calls == [("input.fits", "results", {"save_results": True})]

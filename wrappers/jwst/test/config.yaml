@@ -1,2 +1,3 @@
 jwst:
-  detector1: {}
+  detector1:
+    save_calibrated_ramp: true
