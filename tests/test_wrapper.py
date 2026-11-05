@@ -1,4 +1,3 @@
-import importlib
 import runpy
 import shutil
 import socket
@@ -39,19 +38,19 @@ def test_wrapper_rejects_unknown_stage() -> None:
         log=[],
     )
 
-    with pytest.raises(ValueError, match="Unsupported JWST stage"):
+    with pytest.raises(ValueError, match="Expected one of: .*wfs-image3"):
         runpy.run_path(str(WRAPPER), init_globals={"snakemake": snakemake})
 
 
-def test_wrapper_does_not_mutate_shared_stage_options(
+def test_wrapper_discovers_pipeline_aliases(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    from jwst.pipeline import Detector1Pipeline
+
     calls = []
 
-    class FakePipeline:
-        @staticmethod
-        def call(input_file: str, output_dir: str, **options: object) -> None:
-            calls.append((input_file, output_dir, options))
+    def call(input_file: str, output_dir: str, **options: object) -> None:
+        calls.append((input_file, output_dir, options))
 
     options = {"save_calibrated_ramp": True}
     snakemake = SimpleNamespace(
@@ -66,13 +65,9 @@ def test_wrapper_does_not_mutate_shared_stage_options(
         raise OSError
 
     monkeypatch.setattr(socket, "create_connection", no_network)
-    monkeypatch.setattr(
-        importlib,
-        "import_module",
-        lambda module_name: SimpleNamespace(Detector1Pipeline=FakePipeline),
-    )
+    monkeypatch.setattr(Detector1Pipeline, "call", staticmethod(call))
 
-    runpy.run_path(str(WRAPPER), init_globals={"snakemake": snakemake})
+    wrapper = runpy.run_path(str(WRAPPER), init_globals={"snakemake": snakemake})
 
     assert options == {"save_calibrated_ramp": True}
     assert calls == [
@@ -82,17 +77,31 @@ def test_wrapper_does_not_mutate_shared_stage_options(
             {"save_calibrated_ramp": True, "save_results": True},
         )
     ]
+    assert {
+        "ami3",
+        "coron3",
+        "dark",
+        "detector1",
+        "guider",
+        "image2",
+        "image3",
+        "kpi3",
+        "spec2",
+        "spec3",
+        "tso3",
+        "wfs-image3",
+    }.issubset(wrapper["available_stages"]())
 
 
 def test_wrapper_uses_pipeline_defaults_without_configuration(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    from jwst.pipeline import Image2Pipeline
+
     calls = []
 
-    class FakePipeline:
-        @staticmethod
-        def call(input_file: str, output_dir: str, **options: object) -> None:
-            calls.append((input_file, output_dir, options))
+    def call(input_file: str, output_dir: str, **options: object) -> None:
+        calls.append((input_file, output_dir, options))
 
     snakemake = SimpleNamespace(
         params={"stage_name": "image2"},
@@ -102,11 +111,7 @@ def test_wrapper_uses_pipeline_defaults_without_configuration(
         log=[],
     )
 
-    monkeypatch.setattr(
-        importlib,
-        "import_module",
-        lambda module_name: SimpleNamespace(Image2Pipeline=FakePipeline),
-    )
+    monkeypatch.setattr(Image2Pipeline, "call", staticmethod(call))
 
     runpy.run_path(str(WRAPPER), init_globals={"snakemake": snakemake})
 

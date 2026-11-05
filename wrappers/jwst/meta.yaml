@@ -11,10 +11,11 @@ output:
     first output path determines the pipeline output directory.
 params:
   stage_name: >
-    Required JWST stage name: ``detector1``, ``image2``, ``image3``, or
-    ``kpi3``.
+    Required pipeline stage name. (E.g. `detector2`, `image2`).
 notes: >
   Pipeline options are optionally read from
   ``config["jwst"][params.stage_name]``. Omit the ``jwst`` configuration or a
   stage entry to use the pipeline defaults. Add a ``log:`` directive to
-  capture Python stdout and stderr.
+  capture Python stdout and stderr. Pipeline names are derived from aliases by
+  removing the ``calwebb_`` prefix, such as ``calwebb_spec3`` becoming
+  ``spec3``.
