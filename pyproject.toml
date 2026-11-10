@@ -4,7 +4,11 @@ version = "0.1.0"
 description = "Reusable Snakemake workflow for processing JWST data with the JWST calibration pipeline"
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
-dependencies = ["snakemake>=9", "jwst>=3", "jwst-kpi@git+https://github.com/kammerje/jwst-kpi@vandalt"]
+dependencies = [
+  "snakemake>=9",
+  "jwst>=3",
+  "jwst-kpi@git+https://github.com/kammerje/jwst-kpi@vandalt",
+]
 
 [dependency-groups]
 dev = ["ipython", "pytest>=8", "ruff>=0.9"]
