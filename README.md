@@ -29,6 +29,7 @@ rule detector1:
 ```
 
 Replace `<tag>` with a release tag or commit SHA.
+To run from a local copy of the repository, replace the URL with `file:/path/to/snakemake-jwst/wrappers/jwst`.
 The wrapper's Conda environment is created automatically when executing with `--use-conda`.
 
 ## Configuration
