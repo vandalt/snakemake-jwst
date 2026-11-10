@@ -11,3 +11,4 @@ wheels/
 
 # Snakemake
 .snakemake
+wrappers/jwst/test/*.log
