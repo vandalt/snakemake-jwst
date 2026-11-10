@@ -2,6 +2,8 @@
 
 This repository provides a reusable [Snakemake wrapper](https://snakemake-wrappers.readthedocs.io/) for the [JWST calibration pipeline](https://jwst-pipeline.readthedocs.io/).
 
+I'm planning to submit it as an actual Snakemake wrapper, but will develop it here for a short while until it's stable.
+
 ## Use the wrapper
 
 Define your workflow's rules, products, resource requests, and dependencies in the consuming project.
@@ -46,10 +48,8 @@ When network access is unavailable, the wrapper configures CRDS to use the serve
 
 ## Supported stages
 
-It supports all available [JWST pipeline stages](https://jwst-pipeline.readthedocs.io/en/stable/jwst/pipeline/main.html#pipelines) and the 
-
 All stages from the upstream JWST pipeline are supported.
 Stage names are derived from the [stage alias](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/main.html) by removing the `calwebb_` prefix.
 For example, `calwebb_detector` becomes `detector1` and `calwebb_image2` becomes `image2`.
 
-The [jwst-kpi stage 3 pipeline](https://github.com/kammerje/jwst-kpi) is also supported.
+The [jwst-kpi stage 3 pipeline](https://github.com/kammerje/jwst-kpi) is also supported as `kpi3`.
