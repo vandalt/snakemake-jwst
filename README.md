@@ -54,3 +54,17 @@ Stage names are derived from the [stage alias](https://jwst-pipeline.readthedocs
 For example, `calwebb_detector` becomes `detector1` and `calwebb_image2` becomes `image2`.
 
 The [jwst-kpi stage 3 pipeline](https://github.com/kammerje/jwst-kpi) is also supported as `kpi3`.
+
+## Testing
+
+The default test suite is fast and offline; its Detector1 workflow is
+validated with a Snakemake dry-run and an empty placeholder input. To run the
+real Detector1 integration test, which downloads the public 184 MB NIRISS
+exposure from MAST with `curl` and fetches required CRDS references, use:
+
+```bash
+uv run pytest -m integration tests/test_wrapper.py::test_wrapper_runs_detector1_on_real_data
+```
+
+The integration test writes its data download, Conda environment, CRDS cache,
+products, and log to pytest's temporary directory.

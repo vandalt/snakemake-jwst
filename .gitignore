@@ -12,3 +12,7 @@ wheels/
 # Snakemake
 .snakemake
 wrappers/jwst/test/*.log
+
+# Downloaded real-data integration test fixtures
+tests/data/*.fits
+tests/data/*.fits.download
